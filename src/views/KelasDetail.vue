@@ -6,25 +6,9 @@
 
         <ion-content>
             <ion-list>
-                <ion-item>
-                    <ion-label>Pertemuan 1</ion-label>
-                    <ion-badge color="success" slot="end">Hadir</ion-badge>
-                </ion-item>
-                <ion-item>
-                    <ion-label>Pertemuan 2</ion-label>
-                    <ion-badge color="success" slot="end">Hadir</ion-badge>
-                </ion-item>
-                <ion-item>
-                    <ion-label>Pertemuan 3</ion-label>
-                    <ion-badge color="success" slot="end">Hadir</ion-badge>
-                </ion-item>
-                <ion-item>
-                    <ion-label>Pertemuan 4</ion-label>
-                    <ion-badge color="success" slot="end">Hadir</ion-badge>
-                </ion-item>
-                <ion-item>
-                    <ion-label>Pertemuan 5</ion-label>
-                    <ion-badge color="success" slot="end">Hadir</ion-badge>
+                <ion-item v-for="(item,id) in kelasdetail" :key="id">
+                    <ion-label>Pertemuan {{ item.pertemuan }} </ion-label>
+                    <ion-badge color="success" slot="end"> {{ item.status }} </ion-badge>
                 </ion-item>
             </ion-list>
         </ion-content>
@@ -43,8 +27,14 @@
         IonBadge
     } from '@ionic/vue'
     import { defineComponent } from 'vue'
+    import axios from 'axios';
 
     export default  defineComponent({
+        data(){
+            return {
+                kelasdetail: []
+            }
+        },
       components: {
           IonPage,
           IonToolbar,
@@ -54,6 +44,15 @@
           IonItem,
           IonLabel,
           IonBadge
+      },
+      mounted(){
+          axios.post("http://35.153.33.120/api/kelasdetail",{
+              "user_id": localStorage.getItem("user_id"),
+              "kelas_id": this.$route.params.id
+          })
+          .then(response => {
+              this.kelasdetail = response.data.data
+          })
       }  
     })
 </script>

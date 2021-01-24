@@ -7,39 +7,12 @@
         </ion-header>
         <ion-content>
             <ion-list>
-                <ion-item>
+                <ion-item v-for="item in kelas" :key="item.id" 
+                    :routerLink="'/kelas/'+item.id">
                     <ion-label>
-                        Kelas 1
-                        <span class="rata-kanan">No Ruang</span>
-                        <p>Mata Kuliah</p>
-                    </ion-label>
-                </ion-item>
-                <ion-item>
-                    <ion-label>
-                        Kelas 2
-                        <span class="rata-kanan">No Ruang</span>
-                        <p>Mata Kuliah</p>
-                    </ion-label>
-                </ion-item>
-                <ion-item>
-                    <ion-label>
-                        Kelas 3
-                        <span class="rata-kanan">No Ruang</span>
-                        <p>Mata Kuliah</p>
-                    </ion-label>
-                </ion-item>
-                <ion-item>
-                    <ion-label>
-                        Kelas 4
-                        <span class="rata-kanan">No Ruang</span>
-                        <p>Mata Kuliah</p>
-                    </ion-label>
-                </ion-item>
-                <ion-item>
-                    <ion-label>
-                        Kelas 5
-                        <span class="rata-kanan">No Ruang</span>
-                        <p>Mata Kuliah</p>
+                        {{ item.nama }}
+                        <span class="rata-kanan"> {{ item.noruang }} </span>
+                        <p> {{ item.matakuliah }} </p>
                     </ion-label>
                 </ion-item>
             </ion-list>
@@ -59,7 +32,14 @@
         IonLabel
     } from '@ionic/vue'
     import { defineComponent } from 'vue'
+    import axios from 'axios';
+
     export default defineComponent({
+        data(){
+            return {
+                kelas:[]
+            }
+        },
         components: {
             IonPage,
             IonHeader,
@@ -69,6 +49,14 @@
             IonList,
             IonItem,
             IonLabel
+        },
+        mounted(){
+            axios.post("http://35.153.33.120/api/kelas",{
+                "user_id": localStorage.getItem("user_id")
+            })
+            .then(response => {
+                this.kelas = response.data.data
+            })
         }
     })
 </script>
